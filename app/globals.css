@@ -24,3 +24,197 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom dark mode styles for better contrast */
+.dark {
+  color-scheme: dark;
+}
+
+/* Ensure proper text visibility in dark mode - MAXIMUM CONTRAST */
+.dark .text-gray-900 {
+  color: #ffffff !important;
+}
+
+.dark .text-gray-800 {
+  color: #ffffff !important;
+}
+
+.dark .text-gray-700 {
+  color: #f3f4f6 !important;
+}
+
+.dark .text-gray-600 {
+  color: #e5e7eb !important;
+}
+
+.dark .text-gray-500 {
+  color: #d1d5db !important;
+}
+
+.dark .text-gray-400 {
+  color: #9ca3af !important;
+}
+
+.dark .text-gray-300 {
+  color: #f3f4f6 !important;
+}
+
+.dark .text-gray-200 {
+  color: #e5e7eb !important;
+}
+
+/* Ensure proper background colors */
+.dark .bg-white {
+  background-color: #1f2937 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #111827 !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #1f2937 !important;
+}
+
+.dark .bg-gray-200 {
+  background-color: #374151 !important;
+}
+
+/* Ensure proper border colors */
+.dark .border-gray-200 {
+  border-color: #4b5563 !important;
+}
+
+.dark .border-gray-300 {
+  border-color: #6b7280 !important;
+}
+
+/* Ensure proper hover states */
+.dark .hover\:bg-gray-50:hover {
+  background-color: #374151 !important;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: #374151 !important;
+}
+
+.dark .hover\:bg-blue-50:hover {
+  background-color: #1e3a8a !important;
+}
+
+/* Ensure proper focus states */
+.dark .focus\:ring-blue-500:focus {
+  --tw-ring-color: #3b82f6 !important;
+}
+
+.dark .focus\:border-blue-500:focus {
+  border-color: #3b82f6 !important;
+}
+
+/* Additional high contrast fixes */
+.dark .text-blue-600 {
+  color: #93c5fd !important;
+}
+
+.dark .text-green-600 {
+  color: #86efac !important;
+}
+
+.dark .text-red-600 {
+  color: #fca5a5 !important;
+}
+
+.dark .text-yellow-600 {
+  color: #fde047 !important;
+}
+
+.dark .text-purple-600 {
+  color: #c4b5fd !important;
+}
+
+.dark .text-orange-600 {
+  color: #fdba74 !important;
+}
+
+/* Badge text colors in dark mode */
+.dark .bg-green-100 .text-green-800 {
+  color: #86efac !important;
+}
+
+.dark .bg-blue-100 .text-blue-800 {
+  color: #93c5fd !important;
+}
+
+.dark .bg-red-100 .text-red-800 {
+  color: #fca5a5 !important;
+}
+
+.dark .bg-yellow-100 .text-yellow-800 {
+  color: #fde047 !important;
+}
+
+.dark .bg-purple-100 .text-purple-800 {
+  color: #c4b5fd !important;
+}
+
+.dark .bg-orange-100 .text-orange-800 {
+  color: #fdba74 !important;
+}
+
+.dark .bg-gray-100 .text-gray-800 {
+  color: #e5e7eb !important;
+}
+
+/* Additional fixes for table headers and important text */
+.dark th {
+  color: #ffffff !important;
+}
+
+.dark .font-semibold {
+  color: #ffffff !important;
+}
+
+.dark .font-bold {
+  color: #ffffff !important;
+}
+
+/* Fix for any remaining text elements */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: #ffffff !important;
+}
+
+.dark p, .dark span, .dark div {
+  color: #e5e7eb !important;
+}
+
+.dark .text-sm, .dark .text-xs {
+  color: #d1d5db !important;
+}
+
+/* Fix for links and interactive elements */
+.dark a {
+  color: #93c5fd !important;
+}
+
+.dark button {
+  color: #ffffff !important;
+}
+
+/* Fix for form elements */
+.dark input, .dark select, .dark textarea {
+  color: #ffffff !important;
+}
+
+.dark label {
+  color: #f3f4f6 !important;
+}
+
+/* Fix for table cells */
+.dark td {
+  color: #e5e7eb !important;
+}
+
+/* Fix for list items */
+.dark li {
+  color: #e5e7eb !important;
+}

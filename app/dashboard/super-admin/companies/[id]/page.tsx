@@ -2,7 +2,6 @@
 
 import AuthGuard from '@/components/AuthGuard'
 import DashboardLayout from '@/components/DashboardLayout'
-import SexyBackButton from '@/components/SexyBackButton'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Edit, Download, Building, MapPin, Phone, Mail, Globe, Calendar, Users, Car, DollarSign, CheckCircle, AlertTriangle, Activity, FileText, Shield, TrendingUp, TrendingDown, Trash2, Save, X, Lock, Unlock, RefreshCw } from 'lucide-react'
@@ -227,7 +226,6 @@ export default function CompanyDetailsPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <SexyBackButton backTo="Companies" label="Back to Companies" />
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
                   {company.name}

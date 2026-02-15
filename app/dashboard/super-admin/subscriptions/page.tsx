@@ -2,7 +2,6 @@
 
 import AuthGuard from '@/components/AuthGuard'
 import DashboardLayout from '@/components/DashboardLayout'
-import SexyBackButton from '@/components/SexyBackButton'
 import { CreditCard, TrendingUp, Users, DollarSign, Search, Filter, Plus, MoreVertical, Edit, RefreshCw, AlertCircle, CheckCircle, Clock, ArrowUpRight, ArrowDownRight, Eye, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -155,7 +154,6 @@ export default function SubscriptionsPage() {
           {/* Header Actions */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <SexyBackButton backTo="Dashboard" label="Back to Dashboard" />
               <h1 className="text-2xl font-bold text-gray-900">Subscriptions</h1>
               <p className="text-gray-600 mt-1">Manage subscription plans and billing</p>
             </div>

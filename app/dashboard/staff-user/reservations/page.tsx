@@ -3,8 +3,14 @@
 import AuthGuard from '@/components/AuthGuard'
 import DashboardLayout from '@/components/DashboardLayout'
 import { Calendar, Search, Filter, Users, Car, CheckCircle, XCircle, Clock, MapPin, Phone, Mail, AlertTriangle, Check, X, Plus } from 'lucide-react'
+import { useState } from 'react'
 
 export default function StaffReservationsPage() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [typeFilter, setTypeFilter] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [dateFilter, setDateFilter] = useState('')
+
   const reservations = [
     {
       id: 1,
@@ -108,6 +114,37 @@ export default function StaffReservationsPage() {
     }
   ]
 
+  // Filter functions
+  const filteredReservations = reservations.filter(reservation => {
+    const matchesSearch = searchQuery === '' || 
+      reservation.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      reservation.vehicle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      reservation.plate.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    const matchesType = typeFilter === '' || reservation.type === typeFilter
+    const matchesStatus = statusFilter === '' || reservation.status === statusFilter
+    const matchesDate = dateFilter === '' || reservation.date.includes(dateFilter)
+    
+    return matchesSearch && matchesType && matchesStatus && matchesDate
+  })
+
+  const clearFilters = () => {
+    setSearchQuery('')
+    setTypeFilter('')
+    setStatusFilter('')
+    setDateFilter('')
+  }
+
+  const handleCheckIn = (reservationId: number) => {
+    console.log(`Checking in reservation ${reservationId}`)
+    // In a real app, this would update the reservation status
+  }
+
+  const handleCheckOut = (reservationId: number) => {
+    console.log(`Checking out reservation ${reservationId}`)
+    // In a real app, this would update the reservation status
+  }
+
   const getStatusBadge = (status: string) => {
     const styles = {
       completed: 'bg-green-100 text-green-800',
@@ -139,14 +176,6 @@ export default function StaffReservationsPage() {
         {type}
       </span>
     )
-  }
-
-  const handleCheckIn = (reservationId: number) => {
-    console.log(`Checking in reservation ${reservationId}`)
-  }
-
-  const handleCheckOut = (reservationId: number) => {
-    console.log(`Checking out reservation ${reservationId}`)
   }
 
   return (
@@ -216,6 +245,8 @@ export default function StaffReservationsPage() {
                   <input
                     type="text"
                     placeholder="Search reservations..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -223,23 +254,35 @@ export default function StaffReservationsPage() {
               <div className="flex gap-2 flex-wrap">
                 <input
                   type="date"
-                  defaultValue="2024-03-15"
+                  value={dateFilter}
+                  onChange={(e) => setDateFilter(e.target.value)}
                   className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <select 
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
                   <option value="">All Types</option>
                   <option value="check-in">Check-in</option>
                   <option value="check-out">Check-out</option>
                 </select>
-                <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <select 
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
                   <option value="">All Status</option>
                   <option value="pending">Pending</option>
                   <option value="completed">Completed</option>
                   <option value="cancelled">Cancelled</option>
                 </select>
-                <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center">
+                <button 
+                  onClick={clearFilters}
+                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center"
+                >
                   <Filter className="w-4 h-4 mr-2" />
-                  More Filters
+                  Clear
                 </button>
               </div>
             </div>
@@ -251,7 +294,7 @@ export default function StaffReservationsPage() {
               <h2 className="text-lg font-semibold text-gray-900">Today's Schedule</h2>
             </div>
             <div className="divide-y divide-gray-200">
-              {reservations.map((reservation) => (
+              {filteredReservations.map((reservation) => (
                 <div key={reservation.id} className="p-6 hover:bg-gray-50 transition-colors">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -279,7 +322,7 @@ export default function StaffReservationsPage() {
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div>
                           {getTypeBadge(reservation.type)}
                           {getStatusBadge(reservation.status)}
                         </div>
@@ -306,24 +349,24 @@ export default function StaffReservationsPage() {
                         <div className="flex items-center space-x-3">
                           <Phone className="w-4 h-4 text-gray-400" />
                           <div>
-                            <p className="text-sm text-gray-900">{reservation.phone}</p>
+                            <p className="text-sm font-medium text-gray-900">{reservation.phone}</p>
                             <p className="text-xs text-gray-500">{reservation.email}</p>
                           </div>
                         </div>
                       </div>
 
                       {/* Additional Info */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Duration</p>
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Duration</span>
                           <p className="text-sm font-medium text-gray-900">{reservation.duration}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Total Amount</p>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Total Amount</span>
                           <p className="text-sm font-medium text-gray-900">{reservation.totalAmount}</p>
                         </div>
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Deposit</p>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Deposit</span>
                           <p className="text-sm font-medium text-gray-900">{reservation.deposit}</p>
                         </div>
                       </div>
@@ -347,37 +390,40 @@ export default function StaffReservationsPage() {
                             <span className="ml-4">Checked out: {reservation.checkedOutAt}</span>
                           )}
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="ml-4 flex flex-col space-y-2">
-                      {reservation.status === 'pending' && reservation.type === 'Check-in' && (
-                        <button
-                          onClick={() => handleCheckIn(reservation.id)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
-                        >
-                          Check In
-                        </button>
-                      )}
-                      {reservation.status === 'pending' && reservation.type === 'Check-out' && (
-                        <button
-                          onClick={() => handleCheckOut(reservation.id)}
-                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
-                        >
-                          Check Out
-                        </button>
-                      )}
-                      {reservation.status === 'completed' && (
-                        <div className="flex space-x-2">
-                          <button className="px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                            <Check className="w-3 h-3" />
-                          </button>
-                          <button className="px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
-                            <X className="w-3 h-3" />
-                          </button>
+                        <div>
+                          {reservation.date}
                         </div>
-                      )}
+                      </div>
+
+                      {/* Actions */}
+                      <div className="ml-4 flex flex-col space-y-2">
+                        {reservation.status === 'pending' && reservation.type === 'Check-in' && (
+                          <button
+                            onClick={() => handleCheckIn(reservation.id)}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                          >
+                            Check In
+                          </button>
+                        )}
+                        {reservation.status === 'pending' && reservation.type === 'Check-out' && (
+                          <button
+                            onClick={() => handleCheckOut(reservation.id)}
+                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                          >
+                            Check Out
+                          </button>
+                        )}
+                        {reservation.status === 'completed' && (
+                          <div className="flex space-x-2">
+                            <button className="px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                              <Check className="w-3 h-3" />
+                            </button>
+                            <button className="px-3 py-1 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -391,7 +437,7 @@ export default function StaffReservationsPage() {
               <AlertTriangle className="w-5 h-5 text-red-600 mr-2 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-red-800">
                 <p className="font-medium mb-1">Urgent: Sarah Johnson Check-out</p>
-                <p>Customer is running 15 minutes late for check-out. Please follow up with the customer.</p>
+                <p>Customer is running 15 minutes late for check-out. Please follow up with customer.</p>
               </div>
             </div>
           </div>

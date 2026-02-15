@@ -3,8 +3,15 @@
 import AuthGuard from '@/components/AuthGuard'
 import DashboardLayout from '@/components/DashboardLayout'
 import { Car, Search, Filter, MapPin, Calendar, Users, CheckCircle, AlertTriangle, Clock, Settings, Eye, Edit, Fuel, Star } from 'lucide-react'
+import { useState } from 'react'
 
 export default function StaffVehiclesPage() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [locationFilter, setLocationFilter] = useState('')
+  const [typeFilter, setTypeFilter] = useState('')
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false)
+
   const vehicles = [
     {
       id: 1,
@@ -30,7 +37,7 @@ export default function StaffVehiclesPage() {
       model: 'X5',
       year: 2023,
       plate: 'XYZ-789',
-      vin: '5UXCR6C55M9B12345',
+      vin: '5UXCR6C55M9B123456',
       type: 'SUV',
       status: 'rented',
       location: 'With Customer',
@@ -79,6 +86,27 @@ export default function StaffVehiclesPage() {
       assignedDate: '2024-02-15'
     }
   ]
+
+  // Filter functions
+  const filteredVehicles = vehicles.filter(vehicle => {
+    const matchesSearch = searchQuery === '' || 
+      vehicle.make.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      vehicle.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      vehicle.plate.toLowerCase().includes(searchQuery.toLowerCase())
+    
+    const matchesStatus = statusFilter === '' || vehicle.status === statusFilter
+    const matchesLocation = locationFilter === '' || vehicle.location.toLowerCase().includes(locationFilter.toLowerCase())
+    const matchesType = typeFilter === '' || vehicle.type === typeFilter
+    
+    return matchesSearch && matchesStatus && matchesLocation && matchesType
+  })
+
+  const clearFilters = () => {
+    setSearchQuery('')
+    setStatusFilter('')
+    setLocationFilter('')
+    setTypeFilter('')
+  }
 
   const getStatusBadge = (status: string) => {
     const styles = {
@@ -182,37 +210,57 @@ export default function StaffVehiclesPage() {
                   <input
                     type="text"
                     placeholder="Search vehicles..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
               </div>
               <div className="flex gap-2 flex-wrap">
-                <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <select 
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
                   <option value="">All Status</option>
                   <option value="available">Available</option>
                   <option value="rented">Rented</option>
                   <option value="maintenance">Maintenance</option>
                   <option value="cleaning">Cleaning</option>
                 </select>
-                <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <select 
+                  value={locationFilter}
+                  onChange={(e) => setLocationFilter(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
                   <option value="">All Locations</option>
                   <option value="downtown">Downtown Branch</option>
                   <option value="airport">Airport Branch</option>
                   <option value="suburban">Suburban Branch</option>
                 </select>
-                <select className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                <select 
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
                   <option value="">All Types</option>
                   <option value="sedan">Sedan</option>
                   <option value="suv">SUV</option>
                   <option value="truck">Truck</option>
                 </select>
+                <button 
+                  onClick={clearFilters}
+                  className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Clear
+                </button>
               </div>
             </div>
           </div>
 
           {/* Vehicles Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {vehicles.map((vehicle) => (
+            {filteredVehicles.map((vehicle) => (
               <div key={vehicle.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                 {/* Vehicle Header */}
                 <div className="relative h-32 bg-gradient-to-r from-blue-500 to-blue-600">
@@ -324,7 +372,7 @@ export default function StaffVehiclesPage() {
               <AlertTriangle className="w-5 h-5 text-orange-600 mr-2 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-orange-800">
                 <p className="font-medium mb-1">Service Due</p>
-                <p>Mercedes C-Class (DEF-456) is scheduled for service today. Please coordinate with the service center.</p>
+                <p>Mercedes C-Class (DEF-456) is scheduled for service today. Please coordinate with service center.</p>
               </div>
             </div>
           </div>

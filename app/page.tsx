@@ -117,10 +117,10 @@ export default function HomePage() {
             
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Features</a>
-              <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Pricing</a>
-              <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Support</a>
-              <a href="#" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Documentation</a>
+              <a href="/features" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Features</a>
+              <a href="/pricing" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Pricing</a>
+              <a href="/support" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Support</a>
+              <a href="/documentation" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Documentation</a>
             </nav>
 
             {/* Mobile menu button */}
@@ -139,10 +139,10 @@ export default function HomePage() {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <a href="#" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Features</a>
-              <a href="#" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Pricing</a>
-              <a href="#" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Support</a>
-              <a href="#" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Documentation</a>
+              <a href="/features" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Features</a>
+              <a href="/pricing" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Pricing</a>
+              <a href="/support" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Support</a>
+              <a href="/documentation" className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 transition-colors">Documentation</a>
             </div>
           </div>
         )}
@@ -288,8 +288,8 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="/features" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="/pricing" className="hover:text-white transition-colors">Pricing</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
               </ul>
             </div>
@@ -306,9 +306,9 @@ export default function HomePage() {
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="/documentation" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><a href="/support" className="hover:text-white transition-colors">Help Center</a></li>
+                <li><a href="/support" className="hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
           </div>

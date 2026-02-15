@@ -3,8 +3,261 @@
 import AuthGuard from '@/components/AuthGuard'
 import DashboardLayout from '@/components/DashboardLayout'
 import { FileText, Download, Calendar, TrendingUp, TrendingDown, Car, Users, DollarSign, Clock, CheckCircle, AlertTriangle, Search, Filter } from 'lucide-react'
+import { useState } from 'react'
 
 export default function StaffReportsPage() {
+  const [dateRange, setDateRange] = useState('today')
+  const [activityFilter, setActivityFilter] = useState('all')
+
+  const handleExportPDF = () => {
+    console.log('Exporting report as PDF...')
+    try {
+      // Create report data
+      const reportData = {
+        title: 'Staff Reports',
+        date: new Date().toLocaleDateString(),
+        stats: stats,
+        performanceMetrics: performanceMetrics,
+        activities: activities,
+        weeklySummary: {
+          totalCheckIns: 42,
+          totalCheckOuts: 38,
+          avgTime: '6.5 min',
+          customerSatisfaction: '4.7 / 5.0'
+        },
+        vehicleStatus: {
+          available: 8,
+          rented: 3,
+          maintenance: 1
+        }
+      }
+
+      // Create a simple text-based PDF content (client-side)
+      const pdfLines = [
+        'STAFF REPORTS',
+        '='.repeat(50),
+        `Generated: ${reportData.date}`,
+        '='.repeat(50),
+        '',
+        'PERFORMANCE METRICS',
+        '='.repeat(50),
+        ...stats.map(stat => `${stat.title}: ${stat.value} (${stat.change})`),
+        '',
+        'PERFORMANCE INDICATORS',
+        '='.repeat(50),
+        ...performanceMetrics.map(metric => `${metric.metric}: ${metric.value} ${metric.change}`),
+        '',
+        'RECENT ACTIVITIES',
+        '='.repeat(50),
+        ...activities.map(activity => `${activity.time} - ${activity.customer} - ${activity.vehicle} - ${activity.duration} - ${activity.status}`),
+        '',
+        'WEEKLY SUMMARY',
+        '='.repeat(50),
+        `Total Check-ins: 42`,
+        `Total Check-outs: 38`,
+        `Average Time: 6.5 min`,
+        `Customer Satisfaction: 4.7 / 5.0`,
+        '',
+        'VEHICLE STATUS',
+        '='.repeat(50),
+        `Available: 8`,
+        `Rented: 3`,
+        `Maintenance: 1`
+      ]
+
+      const pdfContent = pdfLines.join('\n')
+
+      // Create and download PDF file
+      const blob = new Blob([pdfContent], { type: 'text/plain;charset=utf-8' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `staff-reports-${new Date().toISOString().split('T')[0]}.txt`
+      link.style.display = 'none'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      
+      alert('Report file downloaded successfully! You can open this file and save as PDF using your browser.')
+    } catch (error) {
+      console.error('Error generating report:', error)
+      alert('Error generating report. Please try again.')
+    }
+  }
+
+  const handleExportExcel = () => {
+    console.log('Exporting report as Excel...')
+    try {
+      // Create CSV content for Excel
+      const csvContent = [
+        'Metric,Value,Change',
+        ...stats.map(stat => `${stat.title},${stat.value},${stat.change}`),
+        '',
+        'Performance Metric,Value,Change',
+        ...performanceMetrics.map(metric => `${metric.metric},${metric.value},${metric.change}`),
+        '',
+        'Time,Customer,Vehicle,Duration,Status',
+        ...activities.map(activity => `${activity.time},${activity.customer},${activity.vehicle},${activity.duration},${activity.status}`)
+      ].join('\n')
+
+      // Create and download CSV file
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `staff-reports-${new Date().toISOString().split('T')[0]}.csv`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      
+      alert('Excel report downloaded successfully!')
+    } catch (error) {
+      console.error('Error generating Excel:', error)
+      alert('Error generating Excel report. Please try again.')
+    }
+  }
+
+  const handlePrintReport = () => {
+    console.log('Printing report...')
+    // Add print-specific styles
+    const style = document.createElement('style')
+    style.innerHTML = `
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        body .print-content,
+        body .print-content * {
+          visibility: visible;
+        }
+        body .print-content {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          padding: 20px;
+        }
+        .no-print {
+          display: none !important;
+        }
+      }
+    `
+    document.head.appendChild(style)
+    
+    // Create print content
+    const printContent = document.createElement('div')
+    printContent.className = 'print-content'
+    printContent.innerHTML = `
+      <div style="font-family: Arial, sans-serif;">
+        <h1 style="font-size: 24px; margin-bottom: 20px; color: #1f2937;">Staff Reports</h1>
+        <h2 style="font-size: 18px; margin-bottom: 15px; color: #374151;">Performance Metrics</h2>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+          ${performanceMetrics.map(metric => `
+            <div style="text-align: center; padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px;">
+              <h3 style="font-size: 14px; margin-bottom: 5px; color: #6b7280;">${metric.metric}</h3>
+              <div style="font-size: 20px; font-weight: bold; color: #1f2937;">${metric.value}</div>
+              ${metric.max ? `<div style="font-size: 12px; color: #6b7280;">/ ${metric.max}</div>` : ''}
+              <div style="font-size: 14px; color: ${metric.color};">${metric.change}</div>
+            </div>
+          `).join('')}
+        </div>
+        
+        <h2 style="font-size: 18px; margin: 30px 0 15px 0; color: #374151;">Recent Activities</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+          <thead>
+            <tr style="background: #f8f9fa;">
+              <th style="padding: 10px; text-align: left; border: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">Time</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">Type</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">Customer</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">Vehicle</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">Duration</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid #e5e7eb; font-size: 12px; color: #6b7280;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${activities.map(activity => `
+              <tr>
+                <td style="padding: 10px; border: 1px solid #e5e7eb; font-size: 12px;">${activity.time}</td>
+                <td style="padding: 10px; border: 1px solid #e5e7eb; font-size: 12px;">${activity.type.replace('-', ' ')}</td>
+                <td style="padding: 10px; border: 1px solid #e5e7eb; font-size: 12px;">${activity.customer}</td>
+                <td style="padding: 10px; border: 1px solid #e5e7eb; font-size: 12px;">${activity.vehicle}</td>
+                <td style="padding: 10px; border: 1px solid #e5e7eb; font-size: 12px;">${activity.duration}</td>
+                <td style="padding: 10px; border: 1px solid #e5e7eb; font-size: 12px;">
+                  <span style="padding: 2px 6px; border-radius: 4px; font-size: 10px; background: ${activity.status === 'completed' ? '#d1fae5' : '#fef3c7'}; color: ${activity.status === 'completed' ? '#155724' : '#856404'};">
+                    ${activity.status}
+                  </span>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        
+        <h2 style="font-size: 18px; margin: 30px 0 15px 0; color: #374151;">Weekly Summary</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 20px;">
+          <div style="padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <h3 style="font-size: 16px; margin-bottom: 10px; color: #374151;">Weekly Summary</h3>
+            <div style="space-y: 8px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #6b7280;">Total Check-ins</span>
+                <span style="font-weight: bold;">42</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #6b7280;">Total Check-outs</span>
+                <span style="font-weight: bold;">38</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #6b7280;">Average Time per Transaction</span>
+                <span style="font-weight: bold;">6.5 min</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #6b7280;">Customer Satisfaction</span>
+                <span style="font-weight: bold;">4.7 / 5.0</span>
+              </div>
+            </div>
+          </div>
+          
+          <div style="padding: 15px; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <h3 style="font-size: 16px; margin-bottom: 10px; color: #374151;">Vehicle Status</h3>
+            <div style="space-y: 8px;">
+              <div style="display: flex; justify-content: space-between;">
+                <div style="display: flex; align-items: center;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981; margin-right: 8px;"></div>
+                  <span style="color: #6b7280;">Available</span>
+                </div>
+                <span style="font-weight: bold;">8</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <div style="display: flex; align-items: center;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #3b82f6; margin-right: 8px;"></div>
+                  <span style="color: #6b7280;">Rented</span>
+                </div>
+                <span style="font-weight: bold;">3</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <div style="display: flex; align-items: center;">
+                  <div style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; margin-right: 8px;"></div>
+                  <span style="color: #6b7280;">Maintenance</span>
+                </div>
+                <span style="font-weight: bold;">1</span>
+              </div>
+            </div>
+          </div>
+      </div>
+    `
+    
+    document.body.appendChild(printContent)
+    
+    // Trigger print
+    window.print()
+    
+    // Clean up after printing
+    setTimeout(() => {
+      document.head.removeChild(style)
+      document.body.removeChild(printContent)
+    }, 100)
+  }
   const stats = [
     {
       title: 'Check-ins Today',
@@ -124,19 +377,22 @@ export default function StaffReportsPage() {
   return (
     <AuthGuard requiredRole="staff-user">
       <DashboardLayout role="staff-user" title="Reports">
-        <div className="space-y-6">
+        <div className="space-y-6 no-print">
           {/* Header Actions */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 no-print">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Reports</h1>
               <p className="text-gray-600 mt-1">View your performance and activity reports</p>
             </div>
-            <div className="flex gap-2">
-              <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+            <div className="flex gap-2 no-print">
+              <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors no-print">
                 <Calendar className="w-4 h-4 mr-2" />
                 Date Range
               </button>
-              <button className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button 
+                onClick={handleExportPDF}
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors no-print"
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Export Report
               </button>
@@ -323,15 +579,24 @@ export default function StaffReportsPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Export Options</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              <button 
+                onClick={handleExportPDF}
+                className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Export as PDF
               </button>
-              <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              <button 
+                onClick={handleExportExcel}
+                className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Export as Excel
               </button>
-              <button className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              <button 
+                onClick={handlePrintReport}
+                className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Print Report
               </button>

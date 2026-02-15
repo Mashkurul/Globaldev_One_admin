@@ -3,8 +3,36 @@
 import AuthGuard from '@/components/AuthGuard'
 import DashboardLayout from '@/components/DashboardLayout'
 import { Car, Calendar, MessageSquare, CheckCircle, Clock, AlertCircle, Users } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function StaffUserDashboard() {
+  const router = useRouter()
+  const [showNotifications, setShowNotifications] = useState(false)
+  
+  const handleProcessCheckIn = () => {
+    console.log('Process Check-in clicked')
+    // Navigate to check-in page or show modal
+    router.push('/dashboard/staff-user/reservations')
+  }
+  
+  const handleProcessCheckOut = () => {
+    console.log('Process Check-out clicked')
+    // Navigate to check-out page or show modal
+    router.push('/dashboard/staff-user/reservations')
+  }
+  
+  const handleViewMessages = () => {
+    console.log('View Messages clicked')
+    // Navigate to messages page
+    router.push('/dashboard/staff-user/messages')
+  }
+  
+  const handleVehicleStatus = () => {
+    console.log('Vehicle Status clicked')
+    // Navigate to vehicles page
+    router.push('/dashboard/staff-user/vehicles')
+  }
   const stats = [
     { title: 'My Vehicles', value: '12', change: '+2', icon: <Car className="w-6 h-6" />, color: 'bg-blue-500' },
     { title: 'Today\'s Check-ins', value: '8', change: 'Completed', icon: <CheckCircle className="w-6 h-6" />, color: 'bg-green-500' },
@@ -164,19 +192,31 @@ export default function StaffUserDashboard() {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <button className="flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <button 
+                onClick={handleProcessCheckIn}
+                className="flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
                 <CheckCircle className="w-5 h-5 mr-2" />
                 Process Check-in
               </button>
-              <button className="flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+              <button 
+                onClick={handleProcessCheckOut}
+                className="flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
                 <AlertCircle className="w-5 h-5 mr-2" />
                 Process Check-out
               </button>
-              <button className="flex items-center justify-center px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+              <button 
+                onClick={handleViewMessages}
+                className="flex items-center justify-center px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
                 <MessageSquare className="w-5 h-5 mr-2" />
                 View Messages
               </button>
-              <button className="flex items-center justify-center px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+              <button 
+                onClick={handleVehicleStatus}
+                className="flex items-center justify-center px-4 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+              >
                 <Car className="w-5 h-5 mr-2" />
                 Vehicle Status
               </button>

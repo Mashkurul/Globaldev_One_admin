@@ -4,7 +4,7 @@ import AuthGuard from '@/components/AuthGuard'
 import DashboardLayout from '@/components/DashboardLayout'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Edit, Download, CreditCard, Calendar, DollarSign, Building, Users, CheckCircle, AlertTriangle, Activity, FileText, TrendingUp, TrendingDown, RefreshCw, Eye, Trash2, Save, X, Lock, Unlock } from 'lucide-react'
+import { Edit, Download, CreditCard, Calendar, DollarSign, Building, Users, CheckCircle, AlertTriangle, Activity, FileText, TrendingUp, TrendingDown, RefreshCw, Eye, Trash2, Save, X, Lock, Unlock, Car } from 'lucide-react'
 
 export default function SubscriptionDetailsPage() {
   const router = useRouter()
@@ -503,7 +503,7 @@ export default function SubscriptionDetailsPage() {
                       <div className="flex items-center justify-between mb-2">
                         <Car className="w-8 h-8 text-blue-600" />
                         <span className="text-sm text-gray-600 dark:text-gray-400">
-                          {subscription.utilizationRate}% utilized
+                          {subscription.usage.utilizationRate}% utilized
                         </span>
                       </div>
                       <h4 className="text-2xl font-bold text-gray-900 dark:text-white">{subscription.usage.currentVehicles}</h4>

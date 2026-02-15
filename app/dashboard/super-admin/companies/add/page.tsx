@@ -80,7 +80,7 @@ export default function AddCompanyPage() {
         setFormData(prev => ({
           ...prev,
           [section]: {
-            ...prev[section as keyof typeof prev],
+            ...(prev[section as keyof typeof prev] as { street: string; city: string; state: string; zipCode: string; country: string }),
             [field]: value
           }
         }))

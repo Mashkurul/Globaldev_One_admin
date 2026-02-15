@@ -104,6 +104,17 @@ export default function BusinessAdminNotifications() {
     setConfirmDialog({ ...confirmDialog, isOpen: false })
   }
 
+  const filteredNotifications = notifications.filter(notification => {
+    const matchesSearch = notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         notification.message.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesType = filterType === 'all' || notification.type === filterType
+    const matchesStatus = filterStatus === 'all' || 
+                          (filterStatus === 'read' && notification.read) ||
+                          (filterStatus === 'unread' && !notification.read)
+    
+    return matchesSearch && matchesType && matchesStatus
+  })
+
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -133,17 +144,6 @@ export default function BusinessAdminNotifications() {
     }
     return badges[type as keyof typeof badges] || badges.info
   }
-
-  const filteredNotifications = notifications.filter(notification => {
-    const matchesSearch = notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         notification.message.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesType = filterType === 'all' || notification.type === filterType
-    const matchesStatus = filterStatus === 'all' || 
-                          (filterStatus === 'read' && notification.read) ||
-                          (filterStatus === 'unread' && !notification.read)
-    
-    return matchesSearch && matchesType && matchesStatus
-  })
 
   const unreadCount = notifications.filter(n => !n.read).length
 

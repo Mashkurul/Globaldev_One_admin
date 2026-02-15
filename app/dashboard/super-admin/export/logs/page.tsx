@@ -5,6 +5,7 @@ import DashboardLayout from '@/components/DashboardLayout'
 import { Download, Search, Filter, Calendar, FileText, RefreshCw, Eye, AlertTriangle, CheckCircle, XCircle, Activity, Users, Building, CreditCard, Shield, TrendingUp, TrendingDown, ArrowLeft } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import React from 'react'
 
 export default function ExportLogsPage() {
   const router = useRouter()
@@ -149,7 +150,7 @@ export default function ExportLogsPage() {
   }
 
   const getCategoryIcon = (category: string) => {
-    const iconMap = {
+    const iconMap: Record<string, React.ReactElement> = {
       all: <FileText className="w-4 h-4" />,
       users: <Users className="w-4 h-4" />,
       companies: <Building className="w-4 h-4" />,
@@ -276,7 +277,7 @@ export default function ExportLogsPage() {
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {formats.map(format => (
-                    <option key={format.value} value={format}>
+                    <option key={format.value} value={format.value}>
                       {format.label} - {format.description}
                     </option>
                   ))}

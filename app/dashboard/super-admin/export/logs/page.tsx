@@ -376,7 +376,7 @@ export default function ExportLogsPage() {
                   Showing 10 of {filteredLogs.length} records
                 </p>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Export Statistics */}
